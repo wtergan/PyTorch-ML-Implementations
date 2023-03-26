@@ -4,6 +4,8 @@ Common Architectures used for classification on the CIFAR-10 Dataset.
 
 ## CIFAR-10:
 
+### Introduction to the dataset: 
+
 The CIFAR-10 dataset is a well-known benchmark dataset in the field of computer vision and machine learning. It consists of 60,000 32x32 color images that are divided into 10 classes, with each class containing 6,000 images. The dataset is split into a training set and a test set, with 50,000 and 10,000 images respectively.
 
 The classes in the CIFAR-10 dataset include airplane, automobile, bird, cat, deer, dog, frog, horse, ship, and truck. These images were collected from the internet and hand-labeled to ensure accurate classification.
@@ -29,15 +31,8 @@ Color-Jittered Image:
 
    <img src="https://github.com/wtergan/PyTorch-ML-Implmentations/blob/main/Data%20Images/Color_jittered.png" width=80% height=80%> 
 
-
 The CIFAR-10 dataset served as a benchmark for evaluating the performance of various machine learning algorithms, particularly in the area of image classification. 
 
-### Parameters (default, can be changed):
-
-- `--lr` default=1e-3: Learning Rate.
-- `--epoch` default=100: Number of epochs in the training loop.
-- `--trainbatchsize` default=100: Size of the train batch.
-- `--testbatchsize` default=100: Size of the test batch.
 
 ## Model Architecture:
 
@@ -45,11 +40,11 @@ Now, lets decribe the various model architectures thats been implemented:
 
 ### AlexNet:
 
-Paper : https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf
-
 **"ImageNet Classification with Deep Convolutional Neural Networks"**
 
    ---*Alex Krizhevsky, Ilya Stuskever, Geoffery E. Hinton.*
+   
+Paper : https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf
 
 In the traditional paper, the model consisted of:
 
@@ -57,7 +52,7 @@ In the traditional paper, the model consisted of:
     
 - Trained on ImageNet, where each image in the dataset is a 224x224x3 image.
     
-- Data Argmentation implmented on the images included:
+- Data Argmentation implemented on the images included:
     
     - Random cropping of the images.
         
@@ -83,10 +78,10 @@ In this modified version of AlexNet:
 
 ### VGGNet:
 
-Paper: https://arxiv.org/pdf/1409.1556.pdf
-
 **" Very Deep Convolutional Networks For Large-Scale Image Recognition"**
     ---*Karen Simonytan, Andrew Zisserman*
+    
+Paper: https://arxiv.org/pdf/1409.1556.pdf
 
 In the traditional paper, Karen and Andrew demonstrated 5 different model architectures, being named A-E:
 
@@ -130,10 +125,10 @@ In this modified version of VGGNet, we will:
 
 ### GoogleNet
 
-Paper: https://arxiv.org/abs/1409.4842v1
-
 **"Going Deeper With Convolutions"**
     ---*Christian Szegedy, Wei Liu, Yangqing Jia, et al.*
+    
+Paper: https://arxiv.org/abs/1409.4842v1
 
 In this paper, the authors developed a new neural network architecture called the 'Inception Module', which improved the utilization of computing resources inside of said network. This novel idea increased the performance of the model on the ImageNet dataset and won the ILSVRC in 2014.
 
@@ -171,10 +166,11 @@ In this modified version of GoogleNet, we will:
 
 ### ResNet
 
-Paper: https://arxiv.org/abs/1512.03385
-
 **"Deep Residual Learning for Image Recognition"**
     --- *Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun*
+
+Paper: https://arxiv.org/abs/1512.03385
+
 
 The authors of this paper introduced the idea of residual learning, which is based on adding shortcut connections between layers in the network. These connections allow the model to learn a residual function, which represents the difference between the input and the output of a stack of layers. The residual connections are added to the input, allowing the network to learn the identity function H(x) = x easier. This allieviates the issue of vanishing / exploding gradients. 
 
@@ -225,6 +221,13 @@ In this modified version of ResNet, we will:
 
 
 ### How to run the project:
+
+### Parameters (default, can be changed):
+
+- `--lr` default=1e-3: Learning Rate.
+- `--epoch` default=100: Number of epochs in the training loop.
+- `--trainbatchsize` default=100: Size of the train batch.
+- `--testbatchsize` default=100: Size of the test batch.
 
 To train and test the models, simply run the following command:
 
