@@ -27,12 +27,19 @@ Paper : https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6
     Alex Krizhevsky, Ilya Stuskever, Geoffery E. Hinton.
 
 In the traditional paper, the model consisted of:
+
     - Five convolutional layers and three fully connected layers.
+    
     - Trained on ImageNet, where each image in the dataset is a 224x224x3 image.
+    
     - Data Argmentation implmented on the images included:
+    
         - Random cropping of the images.
+        
         - Random horizontal flips of the images (probability was 50%).
+        
         - Color normalization (subtracting the mean activity over the training set from each pixel).
+        
     - Since we are going to train the model on the CIFAR-10 dataset which consists of 32x32x3 images, we will have to slightly modify the model to handle these images.
 
 In this modified version of AlexNet:
