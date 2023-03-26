@@ -174,8 +174,8 @@ In this modified version of GoogleNet, we will:
 
 Paper: https://arxiv.org/abs/1512.03385
 
-"Deep Residual Learning for Image Recognition"
-    Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
+**"Deep Residual Learning for Image Recognition"**
+    --- *Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun*
 
 The authors of this paper introduced the idea of residual learning, which is based on adding shortcut connections between layers in the network. These connections allow the model to learn a residual function, thus mitigating the issue of vanishing gradients, which is common in very deep networks. 
 
