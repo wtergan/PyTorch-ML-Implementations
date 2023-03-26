@@ -2,6 +2,8 @@
 
 Common Architectures used for classification on the CIFAR-10 Dataset.
 
+## CIFAR-10:
+
 The CIFAR-10 dataset is a well-known benchmark dataset in the field of computer vision and machine learning. It consists of 60,000 32x32 color images that are divided into 10 classes, with each class containing 6,000 images. The dataset is split into a training set and a test set, with 50,000 and 10,000 images respectively.
 
 The classes in the CIFAR-10 dataset include airplane, automobile, bird, cat, deer, dog, frog, horse, ship, and truck. These images were collected from the internet and hand-labeled to ensure accurate classification.
@@ -30,14 +32,14 @@ Color-Jittered Image:
 
 The CIFAR-10 dataset served as a benchmark for evaluating the performance of various machine learning algorithms, particularly in the area of image classification. 
 
-Below is the desciptions of the various model architectures I have implemented using Pytorch as the framework, but first, lets show the default parameters I've used.
-
 ### Parameters (default, can be changed):
 
 - `--lr` default=1e-3: Learning Rate.
-- `--epoch` default=50: Number of epochs in the training loop.
+- `--epoch` default=100: Number of epochs in the training loop.
 - `--trainbatchsize` default=100: Size of the train batch.
 - `--testbatchsize` default=100: Size of the test batch.
+
+## Model Architecture:
 
 Now, lets decribe the various model architectures thats been implemented:
 
@@ -79,7 +81,7 @@ In this modified version of AlexNet:
         
     - We will not implement color normalization on the training set.
 
-#### VGGNet:
+### VGGNet:
 
 Paper: https://arxiv.org/pdf/1409.1556.pdf
 
@@ -126,7 +128,7 @@ In this modified version of VGGNet, we will:
 
     - We will not implement multi-crop evaluations of the images at test time.
 
-#### GoogleNet
+### GoogleNet
 
 Paper: https://arxiv.org/abs/1409.4842v1
 
