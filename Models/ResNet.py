@@ -111,5 +111,5 @@ class ResNet(nn.Module):
         return out
 
 # Function to create a ResNet-34 model
-def resnet34():
+def resnet18():
     return ResNet(ResidualBlock, [3, 4, 6, 3])
