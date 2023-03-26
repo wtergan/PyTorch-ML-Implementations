@@ -154,5 +154,54 @@ In the paper by Szegedy et al., the original inception module consists of four p
 
 - They also replaced the 5x5 convolution with two consecutive 3x3 convolutions, which will produce the same output, but will involve fewer parameters, thus making it more efficient.
 
-An important thing to know that has been outlined in the paper is that 'as features of higher
+An important thing to know that has been outlined in the paper is that 'as features of higher the number of channels increases as we go deeper into the network. This allows the model to capture more high-level features as it progresses through the layers.
+
+In this modified version of GoogleNet, we will:
+
+- Implement a smaller version of the original GoogleNet, which is more suitable for the CIFAR-10 dataset.
+
+- Retain the core architecture of the Inception Module but adjust the number of filters in the branches to better accommodate the smaller images.
+
+- For data augmentation, we will:
+
+    - Randomly crop the images.
+
+    - Randomly flip the images horizontally.
+
+    - We will not implement any color jittering or scaling.
+
+### ResNet
+
+Paper: https://arxiv.org/abs/1512.03385
+
+"Deep Residual Learning for Image Recognition"
+    Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
+
+The authors of this paper introduced the idea of residual learning, which is based on adding shortcut connections between layers in the network. These connections allow the model to learn a residual function, thus mitigating the issue of vanishing gradients, which is common in very deep networks. 
+
+The idea of residual connections is to allow the gradients to flow more easily through the network, thus enabling the training of much deeper networks without suffering from the degradation problem.
+
+In the traditional ResNet, the authors proposed four variations of the architecture with 18, 34, 50, 101, and 152 layers. They achieved state-of-the-art performance on the ImageNet dataset in 2015 and won the ILSVRC competition.
+
+In this modified version of ResNet, we will:
+
+- Implement the smallest of the proposed architectures, that being the 18-layer model, to better accommodate the CIFAR-10 dataset.
+
+- Retain the core architecture of the residual connections and building blocks.
+
+- For data augmentation, we will:
+
+    - Randomly crop the images.
+
+    - Randomly flip the images horizontally.
+
+    - We will not implement any color jittering or scaling.
+
+### How to run the project:
+
+To train and test the models, simply run the following command:
+
+```bash
+python main.py --model {model_name} --lr {learning_rate} --epoch {num_epochs} --trainbatchsize {train_batch_size} --testbatchsize {test_batch_size}
+
 
