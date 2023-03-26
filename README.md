@@ -10,25 +10,22 @@ Lets look at some of the images in the dataset so that we can have an understand
 
 Below is a grid of the first 7 images in each class (airplace, automobile, bird, etc.):
 
-![Normal_images](https://user-images.githubusercontent.com/21693879/227751127-47bba968-255f-4273-9b3d-73cfab20fb8f.png)
 
+Normal Image:
 
-We apply various transformations on the training dataset to help the model generalize and not overfit said data.
+   <img src="https://github.com/wtergan/PyTorch-ML-Implmentations/blob/main/Data%20Images/Normal_images.png" width=80% height=80%>
 
-Below is a grid of the aformentioned plot images when each image has been horizontally flipped:
+Flipped Image:
 
-![Flipped_imagespng](https://user-images.githubusercontent.com/21693879/227751266-591096e7-af2f-4b4a-a315-4b01f364ea45.png)
+   <img src="https://github.com/wtergan/PyTorch-ML-Implmentations/blob/main/Data%20Images/Flipped_imagespng.png" width=80% height=80%> 
 
-Now, lets see the images if the images is cropped at a random location 
+Cropped Image:
 
-![Cropped_images](https://user-images.githubusercontent.com/21693879/227751407-d2c051a2-fff1-4c1f-9d57-9f70f7b45557.png)
-(https://pytorch.org/vision/stable/generated/torchvision.transforms.RandomCrop.html#torchvision.transforms.RandomCrop)
+   <img src="https://github.com/wtergan/PyTorch-ML-Implmentations/blob/main/Data%20Images/Cropped_images.png" width=80% height=80%> 
 
-Lets see the images when the color of said images have a color jitter transformation applied to it. What this means is that we will randomly change the brightness, contrast, saturation and hue of said image:
+Color-Jittered Image:
 
-![Color_jittered](https://user-images.githubusercontent.com/21693879/227751464-ae3afbc6-8faf-4b8f-b5ed-38249b10c8d4.png)
-
-https://pytorch.org/vision/stable/generated/torchvision.transforms.ColorJitter.html#torchvision.transforms.ColorJitter
+   <img src="https://github.com/wtergan/PyTorch-ML-Implmentations/blob/main/Data%20Images/Color_jittered.png" width=80% height=80%> 
 
 
 The CIFAR-10 dataset served as a benchmark for evaluating the performance of various machine learning algorithms, particularly in the area of image classification. 
@@ -223,6 +220,7 @@ In this modified version of ResNet, we will:
     - Randomly flip the images horizontally.
 
     - We will not implement any color jittering or scaling.
+
 
 ### How to run the project:
 
