@@ -1,7 +1,7 @@
 """
 ResNet Model.
 
-Note:
+Note: The version of ResNet demonstrated below is the 18-layer variant.
 """
 
 import torch
