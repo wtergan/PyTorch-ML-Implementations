@@ -205,7 +205,7 @@ In the traditional ResNet, the authors proposed four variations of the architect
 
 In this modified version of ResNet, we will:
 
-- Implement the 34-layer variant of the proposed architecture, to better accommodate the CIFAR-10 dataset. This is chosen because in the paper it was demonstrated that the performance was not substantial between the 18-layer variant and the 18-layer plain net (although the res net version do converge faster).
+- Implement the 18-layer variant of the proposed architecture. Pleae note that the higher layer versions are "better than the 18 and 34 versions by considerable margins" (page 7).
 
     -- please note that the higher layer version are "better than the 18 and 34 versions by considerable margins" (page 7).
 
