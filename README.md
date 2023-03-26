@@ -28,11 +28,11 @@ Paper : https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6
 
 In the traditional paper, the model consisted of:
 
-    - Five convolutional layers and three fully connected layers.
+    > Five convolutional layers and three fully connected layers.
     
-    - Trained on ImageNet, where each image in the dataset is a 224x224x3 image.
+    > Trained on ImageNet, where each image in the dataset is a 224x224x3 image.
     
-    - Data Argmentation implmented on the images included:
+    > Data Argmentation implmented on the images included:
     
         - Random cropping of the images.
         
