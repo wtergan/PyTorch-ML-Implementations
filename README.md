@@ -177,15 +177,40 @@ Paper: https://arxiv.org/abs/1512.03385
 **"Deep Residual Learning for Image Recognition"**
     --- *Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun*
 
-The authors of this paper introduced the idea of residual learning, which is based on adding shortcut connections between layers in the network. These connections allow the model to learn a residual function, thus mitigating the issue of vanishing gradients, which is common in very deep networks. 
+The authors of this paper introduced the idea of residual learning, which is based on adding shortcut connections between layers in the network. These connections allow the model to learn a residual function, which represents the difference between the input and the output of a stack of layers. The residual connections are added to the input, allowing the network to learn the identity function H(x) = x easier. This allieviates the issue of vanishing / exploding gradients. 
 
-The idea of residual connections is to allow the gradients to flow more easily through the network, thus enabling the training of much deeper networks without suffering from the degradation problem.
+Identity mappings are ways of designing the skip connections and the activation functions in ResNet such that the input be directly propagated to the output without any modification. So, the network can learn the residual function F(x) with respect to the input x, instead of learning a new representation H(x). This way, the network can avoid degradation problems when increasing the depth, and can also benefit from shortcut paths that allow information to flow smoothly across layers.
 
+Lets explain in more detail:
+
+Residual function:
+
+- The residual function F(x, {Wi}) represents the mapping that needs to be learned. It is the difference between the input x and the output y of the layers considered. The equation y = F(x, {Wi}) + x shows that the output y is the sum of the input x and the residual function F(x, {Wi}). In the example with two layers, F = W2σ(W1x), where σ denotes the ReLU activation function.
+
+Shortcut connection:
+
+- The shortcut connection is used to perform the operation F + x, which is an element-wise addition. It enables the network to learn the identity function more easily, helping to overcome the vanishing gradient problem in deep networks. The authors use a second nonlinearity (ReLU) after the addition.
+
+No extra parameters or computation complexity:
+
+- The shortcut connections do not introduce any additional parameters or computational complexity, making the architecture efficient and allowing for fair comparisons between plain and residual networks.
+
+Matching dimensions:
+
+- The dimensions of x and F must be equal for the element-wise addition. If they are not, a linear projection Ws can be used in the shortcut connection to match the dimensions: y = F(x, {Wi}) + Ws x. The authors found that using the identity mapping (no matrix Ws) is sufficient for addressing the degradation problem and is more computationally efficient.
+
+Flexibility of residual function:
+
+- The residual function F can have different forms, such as two or three layers (as shown in Fig. 5 of the paper). However, if F has only one layer, the equation becomes similar to a linear layer, and the authors did not observe any advantages in that case.
+
+Applicability to convolutional layers:
+
+- The notations used in the paper can also be applied to convolutional layers. The function F(x, {Wi}) can represent multiple convolutional layers, and the element-wise addition is performed on the feature maps, channel by channel.
 In the traditional ResNet, the authors proposed four variations of the architecture with 18, 34, 50, 101, and 152 layers. They achieved state-of-the-art performance on the ImageNet dataset in 2015 and won the ILSVRC competition.
 
 In this modified version of ResNet, we will:
 
-- Implement the smallest of the proposed architectures, that being the 18-layer model, to better accommodate the CIFAR-10 dataset.
+- Implement the 34-layer variant of the proposed architecture, to better accommodate the CIFAR-10 dataset. This is chosen because in the paper it was demonstrated that the performance was not substantial between the 18-layer variant and the 18-layer plain net (no short cut connections).
 
 - Retain the core architecture of the residual connections and building blocks.
 
