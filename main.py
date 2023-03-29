@@ -248,7 +248,7 @@ class Solver(object):
         progressbar = tqdm(self.test_loader, desc="Testing", unit="batch")
         with torch.no_grad():
             for batch_num, (inputs, targets) in enumerate(self.test_loader):
-                data, target = inputs.to(self.device), targets.to(self.device)
+                inputs, target = inputs.to(self.device), targets.to(self.device)
                 output = self.model(inputs)
                 loss = self.criterion(output, targets)
                 test_loss += loss.item()
