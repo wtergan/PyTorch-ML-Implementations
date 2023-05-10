@@ -220,7 +220,7 @@ In this modified version of ResNet, we will:
     - We will not implement any color jittering or scaling.
 
 
-### How to run the project:
+## How to run the project:
 
 ### Parameters (default, can be changed):
 
