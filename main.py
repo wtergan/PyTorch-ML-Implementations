@@ -17,11 +17,11 @@ import time
 def main():
     parser = argparse.ArgumentParser(description="cifar-10 with PyTorch")
     parser.add_argument('--lr', default=0.001, type=float, help='learning rate')
-    parser.add_argument('--epoch', default=50, type=int, help='number of epochs tp train for')
+    parser.add_argument('--epoch', default=100, type=int, help='number of epochs tp train for')
     parser.add_argument('--trainBatchSize', default=100, type=int, help='training batch size')
     parser.add_argument('--testBatchSize', default=100, type=int, help='testing batch size')
     parser.add_argument('--cuda', default=torch.cuda.is_available(), type=bool, help='whether cuda is in use')
-    parser.add_argument('--model', default='AlexNet', choices=['AlexNet','VGGNet', 'GoogleNet'],help='choose the model to use: AlexNet, VGGNet, or GoogleNet')
+    parser.add_argument('--model', default='AlexNet', choices=['AlexNet','VGGNet','GoogleNet','ResNet', 'SqueezeNet', 'DenseNet'],help='choose the model to use: AlexNet, VGGNet, GoogleNet, ResNet, SqueezeNet, or DenseNet')
     parser.add_argument('--plotting', default=False, help='choose to plot or not to plot the images thats transformed.')
     args = parser.parse_args()
 
@@ -56,32 +56,66 @@ class DataSetup(object):
         self.train_batch_size = config.trainBatchSize
         self.test_batch_size = config.testBatchSize
 
+    # Note that we will have to subsample the training set in order to train the model faster. We will only use 10% of the training and testing sets.
     def load_data(self):
-        if self.model_name == "AlexNet":
-            # Image transformations. For AlexNet, applying horizontal flips and random crops.
-            train_transform = transforms.Compose([transforms.RandomHorizontalFlip(), transforms.RandomCrop(size=32, padding=4), transforms.ToTensor()])
-            test_transform = transforms.Compose([transforms.ToTensor()])
-            train_set = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=train_transform)
-            self.train_loader = torch.utils.data.DataLoader(dataset=train_set, batch_size=self.train_batch_size, shuffle=True)
-            test_set = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=test_transform)
-            self.test_loader = torch.utils.data.DataLoader(dataset=test_set, batch_size=self.test_batch_size, shuffle=False)
-            return self.train_loader, self.test_loader # Used for the plot function.
+        # Loading and image transformations of the datasets.
+        # First, in order to use .Normalize() properly, we will ahve to compute the mean and standard deviation of out subsampled training and testing sets.
+
+        # Lets change the images into a tensor first.
+        tensor_transform = transforms.Compose([transforms.ToTensor()])
+        train_set = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=tensor_transform)
+        test_set = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=tensor_transform)
+
+        # Lets do that subsampling of the sets. 10%. In total, 5000 training samples, 1000 testing samples.
+        # Get the indices for the subsampling, then making the new training and testing set based on these indices.
+        sub_train_size = int(len(train_set)*0.1)
+        sub_test_size = int(len(test_set)*0.1)
+        train_indices = np.random.choice(len(train_set), sub_train_size, replace=False)
+        test_indices = np.random.choice(len(test_set), sub_test_size, replace=False)
+        mini_train = torch.utils.data.Subset(train_set, train_indices)
+        mini_test = torch.utils.data.Subset(train_set, test_indices)
         
-        elif self.model_name == "VGGNet" or self.model_name == "GoogleNet":
-            # Applies tranformations. For VGGNet, applying horizontal flips, random crops, as well as color jitterng.
+        # We must compute the mean and std of the subsampled images along the channels of said images. Then we can normalize using these values.
+        # Lets first stack all of the subsampled iamges together to make the computation of the mean and std easier.
+        train_images =  torch.stack([image for image, _ in mini_train], dim=0)
+        test_images = torch.stack([image for image, _ in mini_test], dim=0)
+
+        # Now, we can calculation of the mean and standard deviation of the images in each respective sets.
+        train_mean  = train_images.mean(dim=[0,2,3])
+        train_std = train_images.std(dim=[0,2,3])
+        test_mean = test_images.mean(dim=[0,2,3])
+        test_std = test_images.std(dim=[0,2,3])
+
+        # Now we can apply transformations to our sets (including normalization), based on the model architecture's needs.
+        if self.model_name == "AlexNet":
+            # For AlexNet, apply horizontal flips and random crops, then normalize.
+            train_transform = transforms.Compose([transforms.RandomHorizontalFlip(), transforms.RandomCrop(size=32, padding=4), transforms.ToTensor(), 
+                                                  transforms.Normalize(train_mean, train_std)])
+            test_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(test_mean, test_std)])
+        
+        elif self.model_name == "VGGNet" or self.model_name == "GoogleNet" or self.model_name == 'ResNet' or self.model_name == 'SqueezeNet' or self.model_name == 'DenseNet':
+            # For VGGNet, GoogleNet, ResNet, or SqueezeNet, applying horizontal flips, random crops, as well as color jitterng. Then normalize.
             # For the color jittering, lets set the brightness as .50, and the hue as .30.
-            train_transform = transforms.Compose([transforms.RandomHorizontalFlip(), transforms.RandomCrop(size=32, padding=4), 
-                                                    transforms.ColorJitter(brightness=.5, hue=.3), transforms.ToTensor()])
-            test_transform = transforms.Compose([transforms.ToTensor()])
-            train_set = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=train_transform)
-            self.train_loader = torch.utils.data.DataLoader(dataset=train_set, batch_size=self.train_batch_size, shuffle=True)
-            test_set = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=test_transform)
-            self.test_loader = torch.utils.data.DataLoader(dataset=test_set, batch_size=self.test_batch_size, shuffle=False)
-            return self.train_loader, self.test_loader # Used for the plot function.
+            train_transform = transforms.Compose([transforms.RandomHorizontalFlip(), transforms.RandomCrop(size=32, padding=4), transforms.ColorJitter(brightness=.5, hue=.3),
+                                                   transforms.ToTensor(), transforms.Normalize(train_mean, train_std)])
+            test_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(test_mean, test_std)])
+        
+        # Apply transformations to dataset, then we can finally subsample based on same indices as before, and everything will be normalized correctly based on that subsampled sets.
+        train_set = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=train_transform)
+        test_set = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=test_transform) 
+        mini_train = torch.utils.data.Subset(train_set, train_indices)
+        mini_test = torch.utils.data.Subset(train_set, test_indices)
+
+        # Train, test, dataloader.
+        self.train_loader = torch.utils.data.DataLoader(dataset=mini_train, batch_size=self.train_batch_size, shuffle=True)
+        self.test_loader = torch.utils.data.DataLoader(dataset=mini_test, batch_size=self.test_batch_size, shuffle=False)
+        return self.train_loader, self.test_loader
+        
+        
+
             
 # This class is used for plotting of the images in the dataset.
 # Used to demonstrate what is in the image, and the various transformations that is applied to said images.
-
 class Plotting():
     # Lets get the CIFAR-10 data. We will not apply transforms to it, but instead do it manually in the plotting.
     def __init__(self):
@@ -108,11 +142,11 @@ class Plotting():
         jittered_transform = transforms.ColorJitter(brightness=.5, hue=.3)
         self._plot_transformed_images("Color Jittered Images", jittered_transform)
 
-
     def _get_fixed_images(self, train_loader):
         train_images = []
         train_labels = []
 
+        # For each image and label in train_loader, we will change it to an array.
         for img, labels in train_loader:
             train_images.append(np.asarray(img))
             train_labels.append(labels)
@@ -122,6 +156,7 @@ class Plotting():
 
         fixed_images = []
         fixed_labels = []
+
 
         for y in range(10):
             idxs = np.flatnonzero(y_train == y)
@@ -196,11 +231,17 @@ class Solver(object):
             self.model = VGGNet(num_classes=10).to(self.device)  # VGGNet
         elif self.model_name == "GoogleNet":
             self.model = GoogleNet(num_classes=10).to(self.device) # GoogleNet
+        elif self.model_name == 'ResNet':
+            self.model = ResNet(ResidualBlock, [3, 4, 5,3], num_classes=10).to(self.device) # ResNet
+        elif self.model_name == 'SqueezeNet':
+            self.model = SqueezeNet(num_classes=10).to(self.device) # SqueeezeNet
+        elif self.model_name == 'DenseNet':
+            self.model = DenseNet(num_classes=10).to(self.device) #DenseNet
 
         # Optimization. Adam is great for such tasks.
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
         # Lets decay the learning rate after epoch number(s) is reached.
-        self.scheduler = optim.lr_scheduler.MultiStepLR(self.optimizer, milestones=[50, 100], gamma=0.5)
+        self.scheduler = optim.lr_scheduler.MultiStepLR(self.optimizer, milestones=[75, 150], gamma=0.5)
         # Finally, computation of loss (softmax and categorical cross entropy of course :) )
         self.criterion = nn.CrossEntropyLoss().to(self.device)
 
