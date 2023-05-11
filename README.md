@@ -2,6 +2,8 @@
 
 Common Architectures used for classification on the CIFAR-10 Dataset.
 
+Note, this project was done mainly for educational purposes.
+
 ## CIFAR-10:
 
 ### Introduction to the dataset: 
@@ -218,6 +220,53 @@ In this modified version of ResNet, we will:
     - Randomly flip the images horizontally.
 
     - We will not implement any color jittering or scaling.
+
+### SqueezeNet
+
+**"AlexNet-Level Accuracy w/ 50x Fewer Parameters & <0.5MB Model Size"**
+    --- *Forrest N. Iandola, Song Han, Matthew W. Moskewicz, Khalid Ashraf, William J. Dally, Kurt Keutzer*
+
+Paper: https://arxiv.org/abs/1602.07360
+
+The authors of this paper proposed a small CNN architecture called SqueezeNet, that achieves  AlexNet-level accuracy on ImageNet with 50x fewer parameters, as well as compression of the model to be less than 0.5MB in size, which is approximately 510x smaller than AlexNet. Advantages to smaller CNN architectures with fewer parameters but comparable accuracies to its larger counterparts is:
+
+More efficient distibuted training: Smaller models train faster due to requiring less communication among servers.
+
+Less overhead when exporting new models to clients: Requiring smaller data transfers between systems.
+
+Feasible FGPA and embedded deployment: Sufficiently small model can be stored directly on the FPGA, and small models can be stored directly on chip.
+
+It acheives this by having the following model architecture:
+
+- Replace 3x3 filters with 1x1 filters
+* Making the majority of 3x3 filters to be 1x1, since a 1x1 filter has on average 9x fewer parameters than a 3x3 filter.
+
+- Decrease the number of input channels to 3x3 filters:
+* Usage of a _Squeeze Layer(s)_, that will decrease the number of input channels to 3x3 filters.
+
+- Downsampling late in the network so that convolution layers have large activation maps:
+* If early layers int he network have alrge strides (which produces the downsampling of the activation maps), then moost of the layers will have small activation maps. So accuracy can remain high is downsamping is late in the network, so information throughout the network can be preserved as much as possible.
+
+### DenseNet
+
+## Performance
+
+The following is a table that shows the performance of the various models thats been implemented.
+
+All models were trained using Google Colab, either on TPUs, or any of the GPUs that were available at the time. (most commonly the V100).
+
+All models trained for 100 epochs. Surely more epochs for training could have produced better results.
+
+As a reminder, 10% of the CIFAR-10 dataset was used for training and testing. This was mainly done for faster training, since this project was done mainly for educational purposes.
+
+| Model         |Training Acc, Loss |Testing Acc, Loss |
+| ------------- |:-----------------:| ----------------:|
+| AlexNet       | 82.840%, 0.4852   | 66.400%, 1.1085  |
+| VGGNet        |                   |                  |
+| GoogleNet     |                   |                  |
+| ResNet        | 98.940%, 0.0303   | 79.300%, 1.1655  |
+| SqueezeNet    |                   |                  |
+| DenseNet      |                   |                  |
 
 
 ## How to run the project:
